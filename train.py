@@ -88,12 +88,6 @@ if __name__ == '__main__':
     print(f"Number of classes: {len(full_image_dataset.classes)}")
     print(f"Total samples: {len(full_image_dataset)}")
 
-    # Check a few samples
-    for i, (image, label) in enumerate(train_dataloader):
-        print(f"Batch {i}: Image shape: {image.shape}, Labels: {label}")
-        if i >= 2:  # Just check first few batches
-            break
-
     num_classes = len(full_image_dataset.classes) # Use full dataset for class count
     model = CNN(num_classes=num_classes).to(device)
 
@@ -134,3 +128,13 @@ if __name__ == '__main__':
               f"Test Loss: {epoch_test_loss:.4f} | Test Acc: {epoch_test_accuracy:.2f}%")
 
     print("\nTraining complete!")
+    model_save_path = "trained_animal_classifier.pth"
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'num_classes': num_classes,
+        'class_names': full_image_dataset.classes,
+        'model_architecture': 'CNN',
+    }, model_save_path)
+
+    print(f"Model saved to: {model_save_path}")
+    print(f"Classes: {full_image_dataset.classes}")
